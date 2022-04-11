@@ -1,26 +1,34 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from ast import Str
+from enum import unique
+from operator import index
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from .database import Base
 
 
-class User(Base):
-    __tablename__ = "users"
-
+class Movie (Base):
+    __tablename__ = "Movies"
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
+    Name = Column(String, unique=True, index=True)
+    Poster = Column(String, unique=True, index=True)
+    Genre = Column(Integer, ForeignKey=True, index=True)
+    RaitingIMDb = Column(Float, unique=True, index=True)
+    Sinopsis = Column(String, unique=True, index=True)
+    Trailer = Column(String, unique=True, index=True)
+    Vote_from_user = Column(String, unique=True, index=True)
+    Chat = Column(Integer, unique=True, index=True)
+    typeMovies = Column(String, unique=True, index=True)
 
-    items = relationship("Item", back_populates="owner")
 
-
-class Item(Base):
-    __tablename__ = "items"
-
+class Genre(Base):
+    __tablename__ = "Genre"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String, unique=True, index=True)
 
-    owner = relationship("User", back_populates="items")
+
+class GenreMovies(Base):
+    __tablename__ = "Genre&Movies"
+    id = Column(Integer, primary_key=True, index=True)
+    idMovie = Column(Integer, ForeignKey("Movie.id"))
+    idGenre = Column(Integer, ForeignKey("Genre.id"))

@@ -1,35 +1,21 @@
+from sys import flags
 from pydantic import BaseModel
 
 
-class ItemBase(BaseModel):
-    title: str
-    description: str | None = None
+class MovieBase(BaseModel):
+    Name: str
+    Poster: str
+    Genre: str
+    RaitingIMDb: float
+    Sinopsis: str
+    Trailer: str
+    Vote_from_user: float
+    Chat: str
+    typeMovies: str
 
 
-class ItemCreate(ItemBase):
-    pass
-
-
-class Item(ItemBase):
+class Movie(MovieBase):
     id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class UserBase(BaseModel):
-    email: str
-
-
-class UserCreate(UserBase):
-    password: str
-
-
-class User(UserBase):
-    id: int
-    is_active: bool
-    items: list[Item] = []
 
     class Config:
         orm_mode = True
