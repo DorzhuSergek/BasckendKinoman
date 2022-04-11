@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from . import models, schemas
+
+import model
 
 
-def get_Movie(session):
-    return session.query(models.Movie)
+def get_all_Movies(db: Session):
+    return db.query(model.Movie).all()

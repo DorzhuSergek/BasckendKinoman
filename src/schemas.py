@@ -1,17 +1,8 @@
-from sys import flags
 from pydantic import BaseModel
 
 
 class MovieBase(BaseModel):
-    Name: str
-    Poster: str
-    Genre: str
-    RaitingIMDb: float
-    Sinopsis: str
-    Trailer: str
-    Vote_from_user: float
-    Chat: str
-    typeMovies: str
+    name: str
 
 
 class Movie(MovieBase):

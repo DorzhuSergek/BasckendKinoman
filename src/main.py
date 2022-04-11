@@ -1,12 +1,13 @@
-from fastapi import Depends, FastAPI
-from .database import SessionLocal
-from crud import get_Movie
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
 
+import crud
+from database import SessionLocal, engine
 
 app = FastAPI()
 
 
-def get_bd():
+def get_db():
     db = SessionLocal()
     try:
         yield db
@@ -15,5 +16,6 @@ def get_bd():
 
 
 @app.get("/movies")
-def getMovie():
-    return get_Movie(Depends(get_bd))
+async def read_movies(db: Session = Depends(get_db)):
+    movies = crud.get_all_Movies(db)
+    return movies
