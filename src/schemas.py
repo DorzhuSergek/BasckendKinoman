@@ -1,35 +1,19 @@
 from pydantic import BaseModel
 
 
-class ItemBase(BaseModel):
-    title: str
-    description: str | None = None
+class MovieBase(BaseModel):
+    name: str
+    poster: str
+    genre: str
+    raitingIMDb: str
+    sinopsis: str
+    trailer: str
+    vote_from_user: str
+    typeMovies: str
 
 
-class ItemCreate(ItemBase):
-    pass
-
-
-class Item(ItemBase):
+class Movie(MovieBase):
     id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class UserBase(BaseModel):
-    email: str
-
-
-class UserCreate(UserBase):
-    password: str
-
-
-class User(UserBase):
-    id: int
-    is_active: bool
-    items: list[Item] = []
 
     class Config:
         orm_mode = True
