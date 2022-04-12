@@ -1,5 +1,5 @@
-
 from fastapi import Depends, FastAPI, HTTPException
+from pip import List
 from sqlalchemy.orm import Session
 
 import crud
@@ -38,7 +38,7 @@ async def read_chat(db: Session = Depends(get_db)):
     return chat
 
 
-@app.get("/comments")
+@app.get("/comments", response_model=List[schemas.Comments])
 async def read_comments(db: Session = Depends(get_db)):
     comment = crud.get_all_comments(db)
     return comment

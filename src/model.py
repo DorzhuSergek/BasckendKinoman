@@ -19,15 +19,6 @@ class Movie(Base):
     typeMovies = Column(String, unique=True, index=True)
 
 
-class User(Base):
-    __tablename__ = "User"
-    id = Column(Integer, primary_key=True, index=True)
-    Full_Name = Column(String)
-    Email = Column(String)
-    Hashed_password = Column(String)
-    Role = Column(String)
-
-
 class Chat(Base):
     __tablename__ = "Chat"
     id = Column(Integer, primary_key=True, index=True)
@@ -36,10 +27,20 @@ class Chat(Base):
     Text = Column(String)
 
 
+class User(Base):
+    __tablename__ = "User"
+    id = Column(Integer, primary_key=True, index=True)
+    Full_Name = Column(String)
+    Email = Column(String)
+    Hashed_password = Column(String)
+    Role = Column(String)
+    comments = relationship("Comments", back_populates="owner")
+
+
 class Comments (Base):
     __tablename__ = "Comments"
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String)
     MovieId = Column(Integer, ForeignKey("Movies.id"))
-    # UserId = list[User]
-    UserId = Column(String)
+    UserId = Column(Integer, ForeignKey("UserId"))
+    user = relationship("User", back_populates="comments")
