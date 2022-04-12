@@ -3,7 +3,6 @@ from datetime import date
 from typing import Text
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-
 from database import Base
 
 
@@ -23,10 +22,10 @@ class Movie(Base):
 class User(Base):
     __tablename__ = "User"
     id = Column(Integer, primary_key=True, index=True)
-    Name = Column(String)
-    Login = Column(String)
+    Full_Name = Column(String)
+    Email = Column(String)
+    Hashed_password = Column(String)
     Role = Column(String)
-    Password = Column(String)
 
 
 class Chat(Base):
@@ -42,4 +41,5 @@ class Comments (Base):
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String)
     MovieId = Column(Integer)
-    UserId = Column(Integer)
+    # UserId = list[User]
+    UserId = Column(String)

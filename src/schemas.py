@@ -1,5 +1,8 @@
 from datetime import date
+from tkinter import Image
 from pydantic import BaseModel
+from passlib.context import CryptContext
+from typing import List
 
 
 class MovieBase(BaseModel):
@@ -13,31 +16,17 @@ class MovieBase(BaseModel):
     typeMovies: str
 
 
-class UserBase(BaseModel):
-    name: str
-    name: str
-    login: str
-    role: str
-    password: str
-
-
-class ChatBase(BaseModel):
-    movieId: int
-    userID: int
-    text: str
-
-
-class CommentsBase(BaseModel):
-    text: str
-    movieId: int
-    userId: int
-
-
 class Movie(MovieBase):
     id: int
+    full_name = str
 
     class Config:
         orm_mode = True
+
+
+class UserBase(BaseModel):
+    email: str
+    full_name: str
 
 
 class User(UserBase):
@@ -47,11 +36,23 @@ class User(UserBase):
         orm_mode = True
 
 
+class ChatBase(BaseModel):
+    movieId: int
+    userID: int
+    text: str
+
+
 class Chat(ChatBase):
     id: int
 
     class Config:
         orm_mode = True
+
+
+class CommentsBase(BaseModel):
+    text: str
+    movieId: int
+    userId: User
 
 
 class Comments(CommentsBase):

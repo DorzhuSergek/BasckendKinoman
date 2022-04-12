@@ -1,10 +1,15 @@
+
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
 import crud
 from database import SessionLocal, engine
-
+import schemas
+import model
 app = FastAPI()
+
+
+model.Base.metadata.create_all(bind=engine)
 
 
 def get_db():
@@ -39,11 +44,6 @@ async def read_comments(db: Session = Depends(get_db)):
     return comment
 
 
-@app.get("/items/{item_id}")
-async def read_item(item_id):
-    return {"item_id": item_id}
-
-
 @app.get("/movies/popular")
 async def popular_Film(db: SessionLocal = Depends(get_db)):
     popular = crud.get_popular_movies(db)
@@ -57,6 +57,35 @@ async def in_the_Cinema(db: SessionLocal = Depends(get_db)):
 
 
 @app.get("/movies/best_Movies")
-async def intheCinema(db: SessionLocal = Depends(get_db)):
+async def in_the_Cinema(db: SessionLocal = Depends(get_db)):
     bestMovies = crud.get_best_movies(db)
     return bestMovies
+
+
+@app.get("/movies/{movie_id}")
+async def get_movie_id(movie_id: int, db: SessionLocal = Depends(get_db)):
+    mov = crud.get_id_movie(db, movie_id)
+    return mov
+
+
+@app.get("/chat/{movie_id}")
+async def get_chat_id(movie_id: int, db: SessionLocal = Depends(get_db)):
+    chat = crud.get_chat_byId_movie(db, movie_id)
+    return chat
+
+
+@app.get("/comments/{movie_id}")
+async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_db)):
+    itemComment = crud.get_comment_byId_comm(db, movie_id)
+    return itemComment
+
+
+# не работает хз почему(чини)
+
+
+# @app.post("/users/", response_model=schemas.User)
+# async def create_user(user: schemas.UserCreate, db: SessionLocal = Depends(get_db)):
+#     db_user = crud.create_user(db, email=user.email)
+#     if db_user:
+#         raise HTTPException(status_code=400, detail="Email already registered")
+#     return crud.create_user(db=db, user=user)
