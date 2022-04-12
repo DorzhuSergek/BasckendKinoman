@@ -40,6 +40,6 @@ class Comments (Base):
     __tablename__ = "Comments"
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String)
-    MovieId = Column(Integer)
+    MovieId = Column(Integer, ForeignKey("Movies.id"))
     # UserId = list[User]
     UserId = Column(String)

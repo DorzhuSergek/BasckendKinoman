@@ -52,7 +52,7 @@ class Chat(ChatBase):
 class CommentsBase(BaseModel):
     text: str
     movieId: int
-    userId: User
+    userId: List[User]
 
 
 class Comments(CommentsBase):

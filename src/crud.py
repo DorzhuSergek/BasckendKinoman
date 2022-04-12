@@ -1,6 +1,6 @@
 from statistics import mode
 from sqlalchemy.orm import Session
-
+from model import User
 import model
 import schemas
 
