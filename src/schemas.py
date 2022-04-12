@@ -61,3 +61,23 @@ class Comments(CommentsBase):
 
     class Config:
         orm_mode = True
+
+
+class ActorBase(BaseModel):
+    FullName: str
+    profile: str
+
+
+class Actor(ActorBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class MovieSchema(MovieBase):
+    actors: List[ActorBase]
+
+
+class ActorSchema(ActorBase):
+    books: List[MovieBase]

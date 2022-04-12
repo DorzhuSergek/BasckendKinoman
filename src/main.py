@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi_users_db_sqlalchemy import joinedload
 from pip import List
 from sqlalchemy.orm import Session
 
@@ -6,6 +7,9 @@ import crud
 from database import SessionLocal, engine
 import schemas
 import model
+from model import Movie
+from schemas import MovieSchema
+from model import Actor
 app = FastAPI()
 
 
@@ -79,6 +83,19 @@ async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_
     itemComment = crud.get_comment_byId_comm(db, movie_id)
     return itemComment
 
+
+# @app.get("/moviesss/{id}", response_model=MovieSchema,
+#          response_model_exclude={'blurb'}, response_model_by_alias=False)
+# async def get_book(id: int, db: Session = Depends(get_db)):
+#     db_book = db.query(Movie).options(joinedload(Movie.actors)).\
+#         where(Movie.id == id).one()
+#     return db_book
+
+
+@app.get("/books", response_model=List[MovieSchema])
+async def get_books(db: Session = Depends(get_db)):
+    db_books = db.query(Actor).options(joinedload(Actor.movies)).all()
+    return db_books
 
 # не работает хз почему(чини)
 
