@@ -34,14 +34,10 @@ class Comments (Base):
 
 class MoviesActor(Base):
     __tablename__ = "Actor_Movies"
-    MovieID = Column(ForeignKey("Movies.id"), primary_key=True)
-    ActorId = Column(ForeignKey("Actor.id"), primary_key=True)
-    movie = relationship("Movie", back_populates="movie")
-    actor = relationship("Actor", back_populates="actor")
-
-    author_name = association_proxy(
-        target_collection='Actor', attr='Full_Name')
-    book_title = association_proxy(target_collection='Movie', attr='Name')
+    MovieId = Column(ForeignKey("Movies.id"), primary_key=True)
+    ActorName = Column(ForeignKey("Actor.id"), primary_key=True)
+    movie = relationship("Movie", back_populates="actor")
+    actor = relationship("Actor", back_populates="movie")
 
 
 class Movie(Base):
@@ -64,5 +60,5 @@ class Actor(Base):
     id = Column(Integer, primary_key=True, index=True)
     Full_Name = Column(String)
     profile = Column(String)
-    Movies = relationship("MoviesActor",
-                          back_populates="movie")
+    movie = relationship("MoviesActor",
+                         back_populates="actor")

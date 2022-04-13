@@ -6,13 +6,13 @@ from typing import List
 
 
 class MovieBase(BaseModel):
-    name: str
-    poster: str
-    genre: str
-    raitingIMDb: str
+    Name: str
+    Poster: str
+    Genre: str
+    RaitingIMDb: str
     sinopsis: str
-    trailer: str
-    vote_from_user: str
+    Trailer: str
+    Vote_from_user: str
     typeMovies: str
 
 
@@ -66,7 +66,7 @@ class Comments(CommentsBase):
 
 class ActorBase(BaseModel):
     FullName: str
-    profile: str
+    Profile: str
 
 
 class Actor(ActorBase):
@@ -82,4 +82,4 @@ class MovieSchema(MovieBase):
 
 
 class ActorSchema(ActorBase):
-    books: List[MovieBase]
+    movie: List[MovieBase]

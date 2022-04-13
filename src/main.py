@@ -86,25 +86,7 @@ async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_
     return itemComment
 
 
-# @app.get("/moviesss/{id}", response_model=MovieSchema,
-#          response_model_exclude={'blurb'}, response_model_by_alias=False)
-# async def get_book(id: int, db: Session = Depends(get_db)):
-#     db_book = db.query(Movie).options(joinedload(Movie.actors)).\
-#         where(Movie.id == id).one()
-#     return db_book
-
-
-@app.get("/books", response_model=MovieSchema, response_model_exclude={'blurb'}, response_model_by_alias=False)
+@app.get("/books", response_model=List[MovieSchema])
 async def get_books(db: Session = Depends(get_db)):
     db_books = db.query(Movie).options(joinedload(Movie.actor)).all()
     return db_books
-
-# не работает хз почему(чини)
-
-
-# @app.post("/users/", response_model=schemas.User)
-# async def create_user(user: schemas.UserCreate, db: SessionLocal = Depends(get_db)):
-#     db_user = crud.create_user(db, email=user.email)
-#     if db_user:
-#         raise HTTPException(status_code=400, detail="Email already registered")
-#     return crud.create_user(db=db, user=user)
