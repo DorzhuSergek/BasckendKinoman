@@ -1,3 +1,4 @@
+from ast import Str
 from datetime import date
 from tkinter import Image
 from pydantic import BaseModel, Field
@@ -7,13 +8,13 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 
 
 class MovieBase(BaseModel):
-    name: str
-    poster: str
-    genre: str
-    raitingIMDb: str
+    Name: str
+    Poster: str
+    Genre: str
+    RaitingIMDb: str
     sinopsis: str
-    trailer: str
-    vote_from_user: str
+    Trailer: str
+    Vote_from_user: str
     typeMovies: str
 
 
@@ -39,8 +40,8 @@ class Chat(ChatBase):
 
 
 class UserBase(BaseModel):
-    email: str
-    full_name: str
+    Email: str
+    Full_Name: str
 
 
 class User(UserBase):
@@ -51,24 +52,27 @@ class User(UserBase):
 
 
 class CommentsBase(BaseModel):
-    text: str = Field(index=True)
-    userId: int = Field(index=True)
-    MovieId: int = Field(index=True)
+    text: str
+    UserId: int
+    MovieId: int
 
 
-class HeroRead(UserBase):
-    id: int
+class CommentFilmBase(BaseModel):
+    Name: str
+    sinopsis: str
 
 
-class Comments(CommentsBase):
-    id: int
+class CommentFilm(CommentFilmBase):
+    pass
 
     class Config:
         orm_mode = True
 
 
-class CommentsWithUser(Comments):
-    user: Optional[User] = None
+class Comments(CommentsBase):
+    id: int
+    user: Optional[User]
+    movie: CommentFilm
 
     class Config:
         orm_mode = True

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 import crud
 from database import SessionLocal, engine
 import model
-from schemas import CommentsWithUser
+from schemas import Comments
 
 
 app = FastAPI()
@@ -39,7 +39,7 @@ async def read_chat(db: Session = Depends(get_db)):
     return chat
 
 
-@app.get("/comments", response_model=CommentsWithUser)
+@app.get("/comments", response_model=List[Comments])
 async def read_comments(db: Session = Depends(get_db)):
     comment = crud.get_all_comments(db)
     return comment
@@ -75,7 +75,7 @@ async def get_chat_id(movie_id: int, db: SessionLocal = Depends(get_db)):
     return chat
 
 
-@app.get("/comments/{movie_id}")
+@app.get("/comments/{movie_id}", response_model=List[Comments])
 async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_db)):
     itemComment = crud.get_comment_byId_comm(db, movie_id)
     return itemComment

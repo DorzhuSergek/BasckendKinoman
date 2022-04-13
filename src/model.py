@@ -17,6 +17,17 @@ class Movie(Base):
     Trailer = Column(String, unique=True, index=True)
     Vote_from_user = Column(String, unique=True, index=True)
     typeMovies = Column(String, unique=True, index=True)
+    comments = relationship("Comments", back_populates="movie")
+
+
+class Comments (Base):
+    __tablename__ = "Comments"
+    id = Column(Integer, primary_key=True, index=True)
+    text = Column(String)
+    MovieId = Column(Integer, ForeignKey("Movies.id"))
+    UserId = Column(Integer, ForeignKey("User.id"))
+    user = relationship("User", back_populates="comments")
+    movie = relationship("Movie", back_populates="comments")
 
 
 class Chat(Base):
@@ -35,12 +46,3 @@ class User(Base):
     Hashed_password = Column(String)
     Role = Column(String)
     comments = relationship("Comments", back_populates="user")
-
-
-class Comments (Base):
-    __tablename__ = "Comments"
-    id = Column(Integer, primary_key=True, index=True)
-    text = Column(String)
-    MovieId = Column(Integer)
-    UserId = Column(Integer, ForeignKey("User.id"))
-    user = relationship("User", back_populates="comments")
