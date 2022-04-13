@@ -18,7 +18,6 @@ class MovieBase(BaseModel):
 
 class Movie(MovieBase):
     id: int
-    full_name = str
 
     class Config:
         orm_mode = True
