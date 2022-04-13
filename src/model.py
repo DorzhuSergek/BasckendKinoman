@@ -4,6 +4,7 @@ from typing import Text
 from sqlalchemy import create_engine, Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 from database import Base
+from sqlalchemy.ext.associationproxy import association_proxy
 
 
 class Chat(Base):
@@ -21,16 +22,26 @@ class User(Base):
     Email = Column(String)
     Hashed_password = Column(String)
     Role = Column(String)
-    comments = relationship("Comments", back_populates="owner")
 
 
 class Comments (Base):
     __tablename__ = "Comments"
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String)
-    MovieId = Column(Integer, ForeignKey("Movies.id"))
-    UserId = Column(Integer, ForeignKey("UserId"))
-    user = relationship("User", back_populates="comments")
+    MovieId = Column(Integer)
+    UserId = Column(Integer)
+
+
+class MoviesActor(Base):
+    __tablename__ = "Actor_Movies"
+    MovieID = Column(ForeignKey("Movies.id"), primary_key=True)
+    ActorId = Column(ForeignKey("Actor.id"), primary_key=True)
+    movie = relationship("Movie", back_populates="movie")
+    actor = relationship("Actor", back_populates="actor")
+
+    author_name = association_proxy(
+        target_collection='Actor', attr='Full_Name')
+    book_title = association_proxy(target_collection='Movie', attr='Name')
 
 
 class Movie(Base):
@@ -44,8 +55,8 @@ class Movie(Base):
     Trailer = Column(String, unique=True, index=True)
     Vote_from_user = Column(String, unique=True, index=True)
     typeMovies = Column(String, unique=True, index=True)
-    actor = relationship("Actor", secondary="Actor_Movies",
-                         back_populates="movies")
+    actor = relationship("MoviesActor",
+                         back_populates="movie")
 
 
 class Actor(Base):
@@ -53,15 +64,5 @@ class Actor(Base):
     id = Column(Integer, primary_key=True, index=True)
     Full_Name = Column(String)
     profile = Column(String)
-    movies = relationship(
-        "Movie", secondary="Actor_Movies", back_populates="actor")
-    movie = relationship("Actor", secondary="Actor_Movies",
-                         back_populates="movies")
-
-
-class MoviesActor(Base):
-    __tablename__ = "Actor_Movies"
-    MovieID = Column(ForeignKey("Movies.id"), primary_key=True)
-    ActorId = Column(ForeignKey("Actor.id"), primary_key=True)
-    movie = relationship("Movie", back_populates="movie")
-    actor = relationship("Actor", back_populates="actor")
+    Movies = relationship("MoviesActor",
+                          back_populates="movie")

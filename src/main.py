@@ -10,7 +10,9 @@ import model
 from model import Movie
 from schemas import MovieSchema
 from model import Actor
-app = FastAPI()
+
+
+app = FastAPI(title="Cinema")
 
 
 model.Base.metadata.create_all(bind=engine)
@@ -42,7 +44,7 @@ async def read_chat(db: Session = Depends(get_db)):
     return chat
 
 
-@app.get("/comments", response_model=List[schemas.Comments])
+@app.get("/comments")
 async def read_comments(db: Session = Depends(get_db)):
     comment = crud.get_all_comments(db)
     return comment
@@ -92,9 +94,9 @@ async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_
 #     return db_book
 
 
-@app.get("/books", response_model=List[MovieSchema], response_model_by_alias=False)
+@app.get("/books", response_model=MovieSchema, response_model_exclude={'blurb'}, response_model_by_alias=False)
 async def get_books(db: Session = Depends(get_db)):
-    db_books = db.query(Actor).options(joinedload(Actor.movies)).all()
+    db_books = db.query(Movie).options(joinedload(Movie.actor)).all()
     return db_books
 
 # не работает хз почему(чини)
