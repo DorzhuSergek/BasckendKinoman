@@ -5,7 +5,7 @@ import crud
 from database import SessionLocal, engine
 import model
 from schemas import Comments
-
+from schemas import Chat
 
 app = FastAPI()
 
@@ -69,7 +69,7 @@ async def get_movie_id(movie_id: int, db: SessionLocal = Depends(get_db)):
     return mov
 
 
-@app.get("/chat/{movie_id}")
+@app.get("/chat/{movie_id}", response_model=List[Chat])
 async def get_chat_id(movie_id: int, db: SessionLocal = Depends(get_db)):
     chat = crud.get_chat_byId_movie(db, movie_id)
     return chat

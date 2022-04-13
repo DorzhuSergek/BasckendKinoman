@@ -26,19 +26,6 @@ class Movie(MovieBase):
         orm_mode = True
 
 
-class ChatBase(BaseModel):
-    movieId: int
-    userID: int
-    text: str
-
-
-class Chat(ChatBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 class UserBase(BaseModel):
     Email: str
     Full_Name: str
@@ -70,6 +57,21 @@ class CommentFilm(CommentFilmBase):
 
 
 class Comments(CommentsBase):
+    id: int
+    user: Optional[User]
+    movie: CommentFilm
+
+    class Config:
+        orm_mode = True
+
+
+class ChatBase(BaseModel):
+    MovieId: int
+    UserId: int
+    Text: str
+
+
+class Chat(ChatBase):
     id: int
     user: Optional[User]
     movie: CommentFilm

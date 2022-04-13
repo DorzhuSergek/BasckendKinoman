@@ -1,5 +1,6 @@
 from ast import Str
 from datetime import date
+import datetime
 from typing import Text
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
@@ -18,6 +19,7 @@ class Movie(Base):
     Vote_from_user = Column(String, unique=True, index=True)
     typeMovies = Column(String, unique=True, index=True)
     comments = relationship("Comments", back_populates="movie")
+    chat = relationship("Chat", back_populates="movie")
 
 
 class Comments (Base):
@@ -33,9 +35,11 @@ class Comments (Base):
 class Chat(Base):
     __tablename__ = "Chat"
     id = Column(Integer, primary_key=True, index=True)
-    MovieId = Column(Integer)
-    UserId = Column(Integer)
+    MovieId = Column(Integer, ForeignKey("Movies.id"))
+    UserId = Column(Integer, ForeignKey("User.id"))
     Text = Column(String)
+    user = relationship("User", back_populates="chat")
+    movie = relationship("Movie", back_populates="chat")
 
 
 class User(Base):
@@ -46,3 +50,4 @@ class User(Base):
     Hashed_password = Column(String)
     Role = Column(String)
     comments = relationship("Comments", back_populates="user")
+    chat = relationship("Chat", back_populates="user")
