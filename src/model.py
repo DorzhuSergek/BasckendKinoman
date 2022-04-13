@@ -6,14 +6,6 @@ from sqlalchemy.orm import declarative_base, relationship
 from database import Base
 
 
-Actor_Movies = Table('Actor_Movies', Base.metadata,
-                     Column('MovieId', ForeignKey(
-                         'Movies.id'), primary_key=True),
-                     Column('ActorName', ForeignKey(
-                         'Actor.id'), primary_key=True)
-                     )
-
-
 class Chat(Base):
     __tablename__ = "Chat"
     id = Column(Integer, primary_key=True, index=True)
@@ -65,3 +57,11 @@ class Actor(Base):
         "Movie", secondary="Actor_Movies", back_populates="actor")
     movie = relationship("Actor", secondary="Actor_Movies",
                          back_populates="movies")
+
+
+class MoviesActor(Base):
+    __tablename__ = "Actor_Movies"
+    MovieID = Column(ForeignKey("Movies.id"), primary_key=True)
+    ActorId = Column(ForeignKey("Actor.id"), primary_key=True)
+    movie = relationship("Movie", back_populates="movie")
+    actor = relationship("Actor", back_populates="actor")

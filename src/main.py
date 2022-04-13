@@ -92,7 +92,7 @@ async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_
 #     return db_book
 
 
-@app.get("/books", response_model=List[MovieSchema])
+@app.get("/books", response_model=List[MovieSchema], response_model_by_alias=False)
 async def get_books(db: Session = Depends(get_db)):
     db_books = db.query(Actor).options(joinedload(Actor.movies)).all()
     return db_books
