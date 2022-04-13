@@ -1,11 +1,12 @@
+from typing import List
 from fastapi import Depends, FastAPI, HTTPException
-from pip import List
 from sqlalchemy.orm import Session
-
 import crud
 from database import SessionLocal, engine
-import schemas
 import model
+from schemas import CommentsWithUser
+
+
 app = FastAPI()
 
 
@@ -38,7 +39,7 @@ async def read_chat(db: Session = Depends(get_db)):
     return chat
 
 
-@app.get("/comments", response_model=List[schemas.Comments])
+@app.get("/comments", response_model=CommentsWithUser)
 async def read_comments(db: Session = Depends(get_db)):
     comment = crud.get_all_comments(db)
     return comment

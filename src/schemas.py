@@ -1,8 +1,9 @@
 from datetime import date
 from tkinter import Image
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from passlib.context import CryptContext
-from typing import List
+from typing import List, Optional
+from fastapi import Depends, FastAPI, HTTPException, Query
 
 
 class MovieBase(BaseModel):
@@ -50,14 +51,24 @@ class User(UserBase):
 
 
 class CommentsBase(BaseModel):
-    text: str
-    movieId: int
-    userId: List[User]
+    text: str = Field(index=True)
+    userId: int = Field(index=True)
+    MovieId: int = Field(index=True)
+
+
+class HeroRead(UserBase):
+    id: int
 
 
 class Comments(CommentsBase):
     id: int
-    user: List[User] = []
+
+    class Config:
+        orm_mode = True
+
+
+class CommentsWithUser(Comments):
+    user: Optional[User] = None
 
     class Config:
         orm_mode = True

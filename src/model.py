@@ -34,13 +34,13 @@ class User(Base):
     Email = Column(String)
     Hashed_password = Column(String)
     Role = Column(String)
-    comments = relationship("Comments", back_populates="owner")
+    comments = relationship("Comments", back_populates="user")
 
 
 class Comments (Base):
     __tablename__ = "Comments"
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String)
-    MovieId = Column(Integer, ForeignKey("Movies.id"))
-    UserId = Column(Integer, ForeignKey("UserId"))
+    MovieId = Column(Integer)
+    UserId = Column(Integer, ForeignKey("User.id"))
     user = relationship("User", back_populates="comments")
