@@ -5,6 +5,7 @@ from typing import Text
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from database import Base
+from sqlalchemy.ext.associationproxy import association_proxy
 
 
 class Movie(Base):
@@ -20,6 +21,8 @@ class Movie(Base):
     typeMovies = Column(String, unique=True, index=True)
     comments = relationship("Comments", back_populates="movie")
     chat = relationship("Chat", back_populates="movie")
+    actor = relationship("MoviesActor",
+                         back_populates="movie")
 
 
 class Comments (Base):
@@ -51,3 +54,25 @@ class User(Base):
     Role = Column(String)
     comments = relationship("Comments", back_populates="user")
     chat = relationship("Chat", back_populates="user")
+
+
+class Actor(Base):
+    __tablename__ = "Actor"
+    id = Column(Integer, primary_key=True, index=True)
+    Full_Name = Column(String)
+    profile = Column(String)
+    movie = relationship("MoviesActor",
+                         back_populates="actor")
+
+
+class MoviesActor(Base):
+    __tablename__ = "Actor_Movies"
+    MovieId = Column(ForeignKey("Movies.id"), primary_key=True)
+    ActorName = Column(ForeignKey("Actor.id"), primary_key=True)
+    movie = relationship("Movie", back_populates="actor")
+    actor = relationship("Actor", back_populates="movie")
+
+    # proxies
+    author_name = association_proxy(
+        target_collection='actor', attr='Full_Name')
+    book_title = association_proxy(target_collection='movie', attr='name')

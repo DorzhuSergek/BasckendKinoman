@@ -1,7 +1,8 @@
 from ast import Str
 from datetime import date
+import email
 from tkinter import Image
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field, validator, constr
 from passlib.context import CryptContext
 from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException, Query
@@ -78,3 +79,42 @@ class Chat(ChatBase):
 
     class Config:
         orm_mode = True
+
+
+class ActorBase(BaseModel):
+    FullName: str
+    profile: str
+
+
+class Actor(ActorBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+
+
+class MovieSchema(MovieBase):
+    Actors: List[ActorBase]
+
+
+class ActorSchema(ActorBase):
+    movie: List[MovieBase]
+
+
+class UserSchema(BaseModel):
+    Email: str
+    Full_Name: str
+
+
+class UserIn(BaseModel):
+    name: str
+    email: EmailStr
+    password: constr(min_length=5)
+    password2: str
+
+    @validator("password2")
+    def password_mathc(cls, v, values, **kwargs):
+        if 'password' in values and v != values["password"]:
+            raise ValueError("passwords dont match")
+        return v
