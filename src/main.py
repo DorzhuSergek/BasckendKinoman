@@ -1,4 +1,5 @@
-from typing import List
+import imp
+from typing import Any, List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import declarative_base, relationship, joinedload
 from sqlalchemy.orm import Session
@@ -7,17 +8,13 @@ from database import SessionLocal, engine
 import model
 from schemas import Comments
 from schemas import Chat
-from model import Movie, Actor
-from schemas import MovieSchema, ActorSchema
 from fastapi.security import OAuth2PasswordBearer
-from schemas import User, UserSchema
-
+from model import User
+from schemas import UserCreate
+import schemas
 
 app = FastAPI()
-
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 model.Base.metadata.create_all(bind=engine)
 
@@ -90,16 +87,7 @@ async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_
     return itemComment
 
 
-# @app.post("/createUser",response_model=UserSchema)
-# async def create_User(
-
-# )
-# не работает хз почему(чини)
-
-
-# @app.post("/users/", response_model=schemas.User)
-# async def create_user(user: schemas.UserCreate, db: SessionLocal = Depends(get_db)):
-#     db_user = crud.create_user(db, email=user.email)
-#     if db_user:
-#         raise HTTPException(status_code=400, detail="Email already registered")
-#     return crud.create_user(db=db, user=user)
+@app.post("/user", response_model=schemas.User)
+def create_user(*, db: Session = Depends(get_db), userIn: UserCreate) -> Any:
+    user = crud.create_user(db, userIn)
+    return user

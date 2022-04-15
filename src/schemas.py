@@ -30,10 +30,12 @@ class Movie(MovieBase):
 class UserBase(BaseModel):
     Email: str
     Full_Name: str
+    Hashed_password: str
+    Role: str = "user"
 
 
 class User(UserBase):
-    id: int
+    pass
 
     class Config:
         orm_mode = True
@@ -102,14 +104,9 @@ class ActorSchema(ActorBase):
     movie: List[MovieBase]
 
 
-class UserSchema(BaseModel):
-    Email: str
+class UserCreate(BaseModel):
     Full_Name: str
-
-
-class UserIn(BaseModel):
-    name: str
-    email: EmailStr
+    Email: EmailStr
     password: constr(min_length=5)
     password2: str
 
