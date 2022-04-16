@@ -1,4 +1,6 @@
 import imp
+import statistics
+from tokenize import Token
 from typing import Any, List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import declarative_base, relationship, joinedload
@@ -12,6 +14,8 @@ from fastapi.security import OAuth2PasswordBearer
 from model import User
 from schemas import UserCreate
 import schemas
+from model import Login, Token
+from core.security import create_access_token, verify_password
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -88,6 +92,21 @@ async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_
 
 
 @app.post("/user", response_model=schemas.User)
-def create_user(*, db: Session = Depends(get_db), userIn: UserCreate) -> Any:
+def create_user(*, userIn: UserCreate, db: Session = Depends(get_db)) -> Any:
     user = crud.create_user(db, userIn)
-    return user
+    if user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    return crud.create_user(db=db, user=user)
+
+
+@app.post("/login", response_model=Token)
+async def login(login: Login, db: SessionLocal = Depends(get_db)):
+    user = await crud.get_by_email(db, login.email)
+    if user is None or not verify_password(login.password, user.Hashed_password):
+        raise HTTPException(status_code=statistics.HTTP_401_UNAUTHORIZED,
+                            detail="Incorrect username or password")
+
+    return Token(
+        access_token=create_access_token({"sub": user.Email}),
+        token_type="Bearer"
+    )

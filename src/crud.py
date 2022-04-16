@@ -1,3 +1,6 @@
+from ctypes import Union
+from statistics import mode
+from typing import Any, Dict
 from sqlalchemy.orm import Session
 import model
 from fastapi import Depends, FastAPI
@@ -51,7 +54,7 @@ def get_comment_byId_comm(db: Session, id: int):
 
 
 def create_user(db: Session, u: UserCreate) -> User:
-    new_user = User(
+    new_user = model.User(
         Email=u.Email,
         Full_Name=u.Full_Name,
         Hashed_password=hash_password(u.password),
@@ -60,3 +63,23 @@ def create_user(db: Session, u: UserCreate) -> User:
     db.commit()
     db.refresh(new_user)
     return new_user
+
+
+async def get_by_email(db: Session, email: str) -> User:
+    # query =(model.User).filter(model.User.Email=email)
+    # user = await self.database.fetch_one(query)
+    # if user is None:
+    #     return None
+    return db.query(model.User).filter(model.User.Email == email).first()
+
+
+# def update_user(db: Session, db_obj: User, obj_in: Union[UserUpdate, Dict[str, Any]]) -> User:
+#     if isinstance(obj_in, dict):
+#             updated_data = obj_in
+#     else:
+#             updated_data = obj_in.dict(exclude_unset=True)
+#     if updated_data["password"]:
+#             hashed_password = hash_password(updated_data["password"])
+#             del updated_data["password"]
+#             updated_data["hashed_password"] = hashed_password
+#     return super().update(db, db_obj=db_obj, obj_in=updated_data)

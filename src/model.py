@@ -2,6 +2,7 @@ from ast import Str
 from datetime import date
 import datetime
 from typing import Text
+from pydantic import BaseModel, EmailStr
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from database import Base
@@ -76,3 +77,13 @@ class MoviesActor(Base):
     author_name = association_proxy(
         target_collection='actor', attr='Full_Name')
     book_title = association_proxy(target_collection='movie', attr='name')
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class Login(BaseModel):
+    email: EmailStr
+    password: str

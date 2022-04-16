@@ -30,11 +30,9 @@ class Movie(MovieBase):
 class UserBase(BaseModel):
     Email: str
     Full_Name: str
-    Hashed_password: str
-    Role: str = "user"
 
 
-class User(UserBase):
+class User (UserBase):
     pass
 
     class Config:
@@ -115,3 +113,7 @@ class UserCreate(BaseModel):
         if 'password' in values and v != values["password"]:
             raise ValueError("passwords dont match")
         return v
+
+
+class UserUpdate(UserBase):
+    Hashed_password: str
