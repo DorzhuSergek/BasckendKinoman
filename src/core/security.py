@@ -4,7 +4,7 @@ from fastapi import HTTPException, Request
 from passlib.hash import pbkdf2_sha256
 from jose import jwt
 from .config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
-from fastapi.security import HTTPBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 
 def verify_password(password: str, hashed_password: str) -> bool:
