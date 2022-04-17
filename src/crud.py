@@ -1,5 +1,6 @@
 from ctypes import Union
 from statistics import mode
+import statistics
 from typing import Any, Dict
 from sqlalchemy.orm import Session
 import model
@@ -8,6 +9,8 @@ from fastapi.security import OAuth2PasswordBearer
 from schemas import User
 from schemas import UserCreate
 from core.security import hash_password
+from schemas import CommentIn
+from schemas import Comments
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -66,20 +69,16 @@ def create_user(db: Session, u: UserCreate) -> User:
 
 
 async def get_by_email(db: Session, email: str) -> User:
-    # query =(model.User).filter(model.User.Email=email)
-    # user = await self.database.fetch_one(query)
-    # if user is None:
-    #     return None
     return db.query(model.User).filter(model.User.Email == email).first()
 
 
-# def update_user(db: Session, db_obj: User, obj_in: Union[UserUpdate, Dict[str, Any]]) -> User:
-#     if isinstance(obj_in, dict):
-#             updated_data = obj_in
-#     else:
-#             updated_data = obj_in.dict(exclude_unset=True)
-#     if updated_data["password"]:
-#             hashed_password = hash_password(updated_data["password"])
-#             del updated_data["password"]
-#             updated_data["hashed_password"] = hashed_password
-#     return super().update(db, db_obj=db_obj, obj_in=updated_data)
+def create_comment(db: Session, user_id: int, j: CommentIn, movie_id: int):
+    comment = Comments(
+        text=j.text,
+        UserId=user_id,
+        MovieId=movie_id,
+    )
+    db.add(comment)
+    db.commit()
+    db.refresh(comment)
+    return comment

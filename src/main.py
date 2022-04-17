@@ -16,6 +16,7 @@ from schemas import UserCreate
 import schemas
 from model import Login, Token
 from core.security import create_access_token, verify_password
+from core.security import JWTBearer
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -110,3 +111,28 @@ async def login(login: Login, db: SessionLocal = Depends(get_db)):
         access_token=create_access_token({"sub": user.Email}),
         token_type="Bearer"
     )
+
+
+@app.post("/comments/{movieId}", response_model=schemas.Comments)
+async def create_comment(
+        j: schemas.CommentIn,
+        db: Session = Depends(get_db)):
+    return None
+
+
+async def get_current_user(
+    users: SessionLocal = Depends(get_db),
+    token: str = Depends(JWTBearer()),
+) -> User:
+    cred_exception = HTTPException(
+        status_code=statistics.HTTP_403_FORBIDDEN, detail="Credentials are not valid")
+    payload = decode_access_token(token)
+    if payload is None:
+        raise cred_exception
+    email: str = payload.get("sub")
+    if email is None:
+        raise cred_exception
+    user = await users.get_by_email(email=email)
+    if user is None:
+        return cred_exception
+    return user

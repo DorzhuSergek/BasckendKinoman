@@ -58,9 +58,8 @@ class CommentFilm(CommentFilmBase):
 
 
 class Comments(CommentsBase):
-    id: int
     user: Optional[User]
-    movie: CommentFilm
+    movie: Optional[CommentFilm]
 
     class Config:
         orm_mode = True
@@ -117,3 +116,7 @@ class UserCreate(BaseModel):
 
 class UserUpdate(UserBase):
     Hashed_password: str
+
+
+class CommentIn(CommentsBase):
+    pass
