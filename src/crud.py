@@ -1,12 +1,14 @@
 from ctypes import Union
+from msilib import schema
 from pstats import Stats
 from statistics import mode
 import statistics
 from typing import Any, Dict
+import jwt
 from sqlalchemy.orm import Session
 import model
-from fastapi import Depends, FastAPI, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
 from schemas import User
 from schemas import UserCreate
 from core.security import hash_password
@@ -14,7 +16,8 @@ from schemas import CommentIn
 from schemas import Comments
 from core.security import JWTBearer, decode_access_token
 from db import get_db
-
+from core.config import ALGORITHM, SECRET_KEY
+import schemas
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -75,7 +78,7 @@ async def get_by_email(db: Session, email: str) -> User:
     return db.query(model.User).filter(model.User.Email == email).first()
 
 
-def create_comment(db: Session, user_id: int, j: CommentIn, movie_id: int):
+def create_comment(db: Session, user_id: int, c: CommentIn, movie_id: int) -> schemas.Comments:
     comment = Comments(
         text=j.text,
         UserId=user_id,
@@ -87,19 +90,26 @@ def create_comment(db: Session, user_id: int, j: CommentIn, movie_id: int):
     return comment
 
 
-async def get_current_user(
-    users: User = Depends(get_db),
-    token: str = Depends(JWTBearer()),
-) -> User:
-    cred_exception = HTTPException(
-        status_code=Stats.HTTP_403_FORBIDDEN, detail="Credentials are not valid")
-    payload = decode_access_token(token)
-    if payload is None:
-        raise cred_exception
-    email: str = payload.get("sub")
-    if email is None:
-        raise cred_exception
-    user = await users.get_by_email(email=email)
-    if user is None:
-        return cred_exception
-    return user
+def decode_access_token(db: Session, token: str):
+    try:
+        encode_jwt = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
+    except jwt.JWSError:
+        return None
+    return encode_jwt
+
+
+class JWTBearer(HTTPBearer):
+    def __init__(self, auto_error: bool = True):
+        super(JWTBearer, self).__init__(auto_error=auto_error)
+
+    async def __call__(self, request: Request):
+        credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
+        exp = HTTPException(
+            status_code=statistics.HTTP_403_FORBIDDEN, detail="Invalid auth token")
+        if credentials:
+            token = decode_access_token(credentials.credentials)
+            if token is None:
+                raise exp
+            return credentials.credentials
+        else:
+            raise exp

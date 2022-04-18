@@ -19,6 +19,7 @@ from model import Login, Token
 from core.security import create_access_token, verify_password
 from db import get_db
 from core.security import JWTBearer
+from schemas import CommentIn
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -107,6 +108,14 @@ async def login(login: Login, db: SessionLocal = Depends(get_db)):
     )
 
 
-@app.get("/users/me", dependencies=[Depends(JWTBearer())])
-async def read_items():
-    return "userMe"
+@app.get("/users/me")
+async def read_items(token: str, db: SessionLocal = Depends(get_db)):
+    userme = crud.decode_access_token(db, token)
+    return userme
+
+
+@app.post("/comments/{movieId}", response_model=List[schemas.Comments])
+async def create_comment(c: CommentIn, movieId: int, db: SessionLocal = Depends(get_db), current_user: schemas.User = Depends(crud.decode_access_token)) -> Any:
+    comment = crud.create_comment(
+        db, user_id=current_user.id, c=c, movie_id=movieId)
+    return comment
