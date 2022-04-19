@@ -1,7 +1,10 @@
 from ast import Str
 from datetime import date
 import datetime
+from enum import unique
+from operator import index
 from typing import Text
+from numpy import tri
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
@@ -20,6 +23,7 @@ class Movie(Base):
     Trailer = Column(String, unique=True, index=True)
     Vote_from_user = Column(String, unique=True, index=True)
     typeMovies = Column(String, unique=True, index=True)
+    Background = Column(String, unique=True, index=True)
     comments = relationship("Comments", back_populates="movie")
     chat = relationship("Chat", back_populates="movie")
     actor = relationship("MoviesActor",

@@ -20,11 +20,12 @@ from db import get_db
 from core.security import JWTBearer
 from schemas import CommentIn
 from core.security import get_current_user
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 model.Base.metadata.create_all(bind=engine)
+app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 
 @app.get("/movies")

@@ -17,6 +17,7 @@ class MovieBase(BaseModel):
     Trailer: str
     Vote_from_user: str
     typeMovies: str
+    Background: str
 
 
 class Movie(MovieBase):
