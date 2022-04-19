@@ -1,9 +1,8 @@
-import imp
 import statistics
 from tokenize import Token
 from typing import Any, List
+from click import get_current_context
 from fastapi import Depends, FastAPI, HTTPException
-import jwt
 from sqlalchemy.orm import declarative_base, relationship, joinedload
 from sqlalchemy.orm import Session
 import crud
@@ -20,6 +19,7 @@ from core.security import create_access_token, verify_password
 from db import get_db
 from core.security import JWTBearer
 from schemas import CommentIn
+from core.security import get_current_user
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -87,14 +87,6 @@ async def get_comment_by_id_Movie(movie_id: int, db: SessionLocal = Depends(get_
     return itemComment
 
 
-@app.post("/user", response_model=schemas.User)
-def create_user(*, userIn: UserCreate, db: Session = Depends(get_db)) -> Any:
-    user = crud.create_user(db, userIn)
-    if user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    return crud.create_user(db=db, user=user)
-
-
 @app.post("/login", response_model=Token)
 async def login(login: Login, db: SessionLocal = Depends(get_db)):
     user = await crud.get_by_email(db, login.email)
@@ -114,8 +106,12 @@ async def read_items(token: str, db: SessionLocal = Depends(get_db)):
     return userme
 
 
-@app.post("/comments/{movieId}", response_model=List[schemas.Comments])
-async def create_comment(c: CommentIn, movieId: int, db: SessionLocal = Depends(get_db), current_user: schemas.User = Depends(crud.decode_access_token)) -> Any:
-    comment = crud.create_comment(
-        db, user_id=current_user.id, c=c, movie_id=movieId)
-    return comment
+@app.post("/user", response_model=schemas.User)
+def create_user(*, userIn: UserCreate, db: Session = Depends(get_db)) -> Any:
+    user = crud.create_user(db=db, u=userIn)
+    return user
+
+
+@app.post("/comments/{MovieId}", response_model=Comments)
+async def create_comment(*, c: CommentIn, movieId: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)) -> Any:
+    return crud.create_comment(db=db, user_id=current_user.id, c=c, movie_id=movieId)

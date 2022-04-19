@@ -7,7 +7,7 @@ from typing import Any, Dict
 import jwt
 from sqlalchemy.orm import Session
 import model
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
 from schemas import User
 from schemas import UserCreate
@@ -15,7 +15,6 @@ from core.security import hash_password
 from schemas import CommentIn
 from schemas import Comments
 from core.security import JWTBearer, decode_access_token
-from db import get_db
 from core.config import ALGORITHM, SECRET_KEY
 import schemas
 
@@ -79,8 +78,8 @@ async def get_by_email(db: Session, email: str) -> User:
 
 
 def create_comment(db: Session, user_id: int, c: CommentIn, movie_id: int) -> schemas.Comments:
-    comment = Comments(
-        text=j.text,
+    comment = model.Comments(
+        text=c.text,
         UserId=user_id,
         MovieId=movie_id,
     )
@@ -105,7 +104,7 @@ class JWTBearer(HTTPBearer):
     async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         exp = HTTPException(
-            status_code=statistics.HTTP_403_FORBIDDEN, detail="Invalid auth token")
+            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid auth token")
         if credentials:
             token = decode_access_token(credentials.credentials)
             if token is None:

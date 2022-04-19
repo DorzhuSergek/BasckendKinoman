@@ -1,8 +1,15 @@
 import datetime
 import statistics
-from fastapi import HTTPException, Request
+from fastapi import Depends, HTTPException, Request, status
 from passlib.hash import pbkdf2_sha256
 from jose import jwt
+from requests import Session
+
+import schemas
+import crud
+from db import get_db
+from model import User
+from database import SessionLocal
 from .config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
@@ -37,7 +44,7 @@ class JWTBearer(HTTPBearer):
     async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         exp = HTTPException(
-            status_code=statistics.HTTP_403_FORBIDDEN, detail="Invalid auth token")
+            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid auth token")
         if credentials:
             token = decode_access_token(credentials.credentials)
             if token is None:
@@ -45,3 +52,21 @@ class JWTBearer(HTTPBearer):
             return credentials.credentials
         else:
             raise exp
+
+
+async def get_current_user(
+    db: SessionLocal = Depends(get_db),
+    token: str = Depends(JWTBearer()),
+) -> schemas.User:
+    cred_exception = HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN, detail="Credentials are not valid")
+    payload = decode_access_token(token)
+    if payload is None:
+        raise cred_exception
+    email: str = payload.get("sub")
+    if email is None:
+        raise cred_exception
+    user = await crud.get_by_email(db, email=email)
+    if user is None:
+        return cred_exception
+    return user

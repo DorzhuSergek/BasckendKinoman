@@ -33,6 +33,7 @@ class UserBase(BaseModel):
 
 
 class User (UserBase):
+    id: int
     pass
 
     class Config:
@@ -41,8 +42,6 @@ class User (UserBase):
 
 class CommentsBase(BaseModel):
     text: str
-    UserId: int
-    MovieId: int
 
 
 class CommentFilmBase(BaseModel):
@@ -60,6 +59,8 @@ class CommentFilm(CommentFilmBase):
 class Comments(CommentsBase):
     user: Optional[User]
     movie: Optional[CommentFilm]
+    UserId: int
+    MovieId: int
 
     class Config:
         orm_mode = True
