@@ -1,7 +1,3 @@
-from ast import Str
-from datetime import date
-import email
-from tkinter import Image
 from pydantic import BaseModel, EmailStr, Field, validator, constr
 from passlib.context import CryptContext
 from typing import List, Optional
