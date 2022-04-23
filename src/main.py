@@ -5,11 +5,10 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from src import crud
 from database import SessionLocal, engine
-import model
+from src import model
 from schemas import Comments
 from schemas import Chat
-from fastapi.security import OAuth2PasswordBearer, HTTPBasic, HTTPBasicCredentials
-from model import User
+from fastapi.security import OAuth2PasswordBearer
 from schemas import UserCreate
 import schemas
 from model import Login, Token
