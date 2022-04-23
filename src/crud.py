@@ -5,11 +5,8 @@ from sqlalchemy.orm import Session
 from src import model
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
-from schemas import User
-from schemas import UserCreate
+from src.schemas import User, UserCreate, CommentIn
 from core.security import hash_password
-from schemas import CommentIn
-from schemas import Comments
 from core.security import JWTBearer, decode_access_token
 from core.config import ALGORITHM, SECRET_KEY
 from src import schemas
