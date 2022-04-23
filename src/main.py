@@ -3,7 +3,7 @@ from tokenize import Token
 from typing import Any, List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-import crud
+from src import crud
 from database import SessionLocal, engine
 from schemas import Comments
 from schemas import Chat
