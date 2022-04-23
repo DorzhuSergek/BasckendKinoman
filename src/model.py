@@ -1,14 +1,7 @@
-from ast import Str
-from datetime import date
-import datetime
-from enum import unique
-from operator import index
-from typing import Text
-from numpy import tri
 from pydantic import BaseModel, EmailStr
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from database import Base
+from src.database import Base
 from sqlalchemy.ext.associationproxy import association_proxy
 
 
