@@ -2,7 +2,7 @@ from statistics import mode
 from typing import Any, Dict
 import jwt
 from sqlalchemy.orm import Session
-import model
+from src import model
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
 from schemas import User
