@@ -5,16 +5,13 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from src import crud
 from database import SessionLocal, engine
-from schemas import Comments
-from schemas import Chat
+from src.schemas import Comments, Chat, UserCreate, CommentIn
 from fastapi.security import OAuth2PasswordBearer
-from schemas import UserCreate
 from src import schemas
-from model import Login, Token
-from core.security import create_access_token, verify_password
-from db import get_db
-from schemas import CommentIn
-from core.security import get_current_user
+from src.model import Login, Token
+from src.core.security import create_access_token, verify_password
+from src.db import get_db
+from src.core.security import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

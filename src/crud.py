@@ -6,9 +6,9 @@ from src import model
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
 from src.schemas import User, UserCreate, CommentIn
-from core.security import hash_password
-from core.security import JWTBearer, decode_access_token
-from core.config import ALGORITHM, SECRET_KEY
+from src.core.security import hash_password
+from src.core.security import JWTBearer, decode_access_token
+from src.core.config import ALGORITHM, SECRET_KEY
 from src import schemas
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
