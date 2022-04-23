@@ -1,9 +1,7 @@
 import statistics
 from tokenize import Token
 from typing import Any, List
-from click import get_current_context
 from fastapi import Depends, FastAPI, HTTPException
-from sqlalchemy.orm import declarative_base, relationship, joinedload
 from sqlalchemy.orm import Session
 from src import crud
 from database import SessionLocal, engine
@@ -17,7 +15,6 @@ import schemas
 from model import Login, Token
 from core.security import create_access_token, verify_password
 from db import get_db
-from core.security import JWTBearer
 from schemas import CommentIn
 from core.security import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
