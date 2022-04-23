@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from src.database import Base
+from database import Base
 from sqlalchemy.ext.associationproxy import association_proxy
 
 

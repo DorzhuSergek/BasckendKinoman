@@ -3,13 +3,13 @@ from tokenize import Token
 from typing import Any, List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-from src import crud
+import crud
 from database import SessionLocal, engine
 from schemas import Comments
 from schemas import Chat
 from fastapi.security import OAuth2PasswordBearer
 from schemas import UserCreate
-from src import schemas
+import schemas
 from model import Login, Token
 from core.security import create_access_token, verify_password
 from db import get_db
