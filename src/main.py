@@ -3,9 +3,8 @@ from tokenize import Token
 from typing import Any, List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-from src import crud
+import crud
 from database import SessionLocal, engine
-from src import model
 from schemas import Comments
 from schemas import Chat
 from fastapi.security import OAuth2PasswordBearer
@@ -20,7 +19,6 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-model.Base.metadata.create_all(bind=engine)
 app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 
