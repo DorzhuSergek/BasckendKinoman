@@ -1,1 +1,1 @@
-web: python src.main.py uvicorn main:app --reload
+web: python src.main.py runserver 0.0.0.0:5000
