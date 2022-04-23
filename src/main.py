@@ -5,7 +5,7 @@ from click import get_current_context
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import declarative_base, relationship, joinedload
 from sqlalchemy.orm import Session
-import crud
+from src import crud
 from database import SessionLocal, engine
 import model
 from schemas import Comments
