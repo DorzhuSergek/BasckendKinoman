@@ -4,7 +4,7 @@ from typing import Any, List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from src import crud
-from database import SessionLocal, engine
+from src.database import SessionLocal, engine
 from src.schemas import Comments, Chat, UserCreate, CommentIn
 from fastapi.security import OAuth2PasswordBearer
 from src import schemas
