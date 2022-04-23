@@ -1,1 +1,1 @@
-web: gunicorn gettingstarted.wsgi
+web: python src.main.py uvicorn main:app --reload
