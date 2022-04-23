@@ -1,13 +1,11 @@
 import datetime
-import statistics
 from fastapi import Depends, HTTPException, Request, status
 from passlib.hash import pbkdf2_sha256
 from jose import jwt
-from requests import Session
 
 from src import schemas
 from src import crud
-from db import get_db
+from src.db import get_db
 from src.database import SessionLocal
 from .config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
