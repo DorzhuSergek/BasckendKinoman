@@ -28,6 +28,11 @@ model.Base.metadata.create_all(bind=engine)
 app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 
+@app.get("/")
+async def root():
+    return {"open": "/docs"}
+
+
 @app.get("/movies")
 async def read_movies(db: Session = Depends(get_db)):
     movies = crud.get_all_Movies(db)
