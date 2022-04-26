@@ -64,7 +64,6 @@ class Comments(CommentsBase):
 
 
 class ChatBase(BaseModel):
-    MovieId: int
     UserId: int
     Text: str
 
@@ -72,7 +71,6 @@ class ChatBase(BaseModel):
 class Chat(ChatBase):
     id: int
     user: Optional[User]
-    movie: CommentFilm
 
     class Config:
         orm_mode = True

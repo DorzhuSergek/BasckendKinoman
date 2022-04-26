@@ -36,11 +36,9 @@ class Comments (Base):
 class Chat(Base):
     __tablename__ = "Chat"
     id = Column(Integer, primary_key=True, index=True)
-    MovieId = Column(Integer, ForeignKey("Movies.id"))
     UserId = Column(Integer, ForeignKey("User.id"))
     Text = Column(String)
     user = relationship("User", back_populates="chat")
-    movie = relationship("Movie", back_populates="chat")
 
 
 class User(Base):
