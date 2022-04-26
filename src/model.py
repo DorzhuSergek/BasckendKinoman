@@ -18,7 +18,6 @@ class Movie(Base):
     typeMovies = Column(String, unique=True, index=True)
     Background = Column(String, unique=True, index=True)
     comments = relationship("Comments", back_populates="movie")
-    chat = relationship("Chat", back_populates="movie")
     actor = relationship("MoviesActor",
                          back_populates="movie")
 
