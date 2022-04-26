@@ -25,7 +25,6 @@ class Movie(Base):
     typeMovies = Column(String, unique=True, index=True)
     Background = Column(String, unique=True, index=True)
     comments = relationship("Comments", back_populates="movie")
-    chat = relationship("Chat", back_populates="movie")
     actor = relationship("MoviesActor",
                          back_populates="movie")
 
@@ -43,11 +42,9 @@ class Comments (Base):
 class Chat(Base):
     __tablename__ = "Chat"
     id = Column(Integer, primary_key=True, index=True)
-    MovieId = Column(Integer, ForeignKey("Movies.id"))
     UserId = Column(Integer, ForeignKey("User.id"))
     Text = Column(String)
     user = relationship("User", back_populates="chat")
-    movie = relationship("Movie", back_populates="chat")
 
 
 class User(Base):

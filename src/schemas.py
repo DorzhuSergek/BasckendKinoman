@@ -68,15 +68,13 @@ class Comments(CommentsBase):
 
 
 class ChatBase(BaseModel):
-    MovieId: int
     UserId: int
     Text: str
 
 
 class Chat(ChatBase):
     id: int
-    user: Optional[User]
-    movie: CommentFilm
+    user: User
 
     class Config:
         orm_mode = True

@@ -53,10 +53,6 @@ def get_id_movie(db: Session, id: int):
     return db.query(model.Movie).filter(model.Movie.id == id).all()
 
 
-def get_chat_byId_movie(db: Session, id: int):
-    return db.query(model.Chat).filter(model.Chat.MovieId == id).all()
-
-
 def get_comment_byId_comm(db: Session, id: int):
     return db.query(model.Comments).filter(model.Comments.MovieId == id).all()
 

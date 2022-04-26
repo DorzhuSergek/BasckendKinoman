@@ -40,7 +40,7 @@ async def read_user(db: Session = Depends(get_db)):
     return user
 
 
-@app.get("/all_chats")
+@app.get("/all_chats", response_model=List[Chat])
 async def read_chat(db: Session = Depends(get_db)):
     chat = crud.get_all_chat(db)
     return chat
@@ -74,12 +74,6 @@ async def in_the_Cinema(db: SessionLocal = Depends(get_db)):
 async def get_movie_id(movie_id: int, db: SessionLocal = Depends(get_db)):
     mov = crud.get_id_movie(db, movie_id)
     return mov
-
-
-@app.get("/chat/{movie_id}", response_model=List[Chat])
-async def get_chat_id(movie_id: int, db: SessionLocal = Depends(get_db)):
-    chat = crud.get_chat_byId_movie(db, movie_id)
-    return chat
 
 
 @app.get("/comments/{movie_id}", response_model=List[Comments])
