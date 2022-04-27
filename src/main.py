@@ -21,6 +21,8 @@ from core.security import JWTBearer
 from schemas import CommentIn
 from core.security import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
+
+from schemas import ChatIn
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -110,3 +112,8 @@ def create_user(*, userIn: UserCreate, db: Session = Depends(get_db)) -> Any:
 @app.post("/comments/{MovieId}", response_model=Comments)
 async def create_comment(*, c: CommentIn, movieId: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)) -> Any:
     return crud.create_comment(db=db, user_id=current_user.id, c=c, movie_id=movieId)
+
+
+@app.post("/chat/", response_model=Chat)
+async def create_message(*, c: ChatIn, db: SessionLocal = Depends(get_db), current_user: schemas.User = Depends(get_current_user)) -> Any:
+    return crud.create_message(db=db, user_id=current_user.id, c=c)

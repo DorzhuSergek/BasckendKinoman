@@ -68,13 +68,13 @@ class Comments(CommentsBase):
 
 
 class ChatBase(BaseModel):
-    UserId: int
     Text: str
 
 
 class Chat(ChatBase):
     id: int
     user: User
+    UserId: int
 
     class Config:
         orm_mode = True
@@ -119,4 +119,8 @@ class UserUpdate(UserBase):
 
 
 class CommentIn(CommentsBase):
+    pass
+
+
+class ChatIn(ChatBase):
     pass
