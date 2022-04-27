@@ -10,7 +10,7 @@ from src.core.security import hash_password
 from src.core.security import JWTBearer, decode_access_token
 from src.core.config import ALGORITHM, SECRET_KEY
 from src import schemas
-
+from src.schemas import Chat, ChatIn
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -76,6 +76,17 @@ def create_comment(db: Session, user_id: int, c: CommentIn, movie_id: int) -> sc
     db.commit()
     db.refresh(comment)
     return comment
+
+
+def create_message(db: Session, user_id, c: ChatIn) -> Chat:
+    chat = model.Chat(
+        Text=c.Text,
+        UserId=user_id
+    )
+    db.add(chat)
+    db.commit()
+    db.refresh(chat)
+    return chat
 
 
 def decode_access_token(db: Session, token: str):
