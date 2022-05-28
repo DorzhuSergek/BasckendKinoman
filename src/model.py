@@ -1,3 +1,5 @@
+from ast import Str
+from enum import unique
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
@@ -17,6 +19,9 @@ class Movie(Base):
     Vote_from_user = Column(String, unique=True, index=True)
     typeMovies = Column(String, unique=True, index=True)
     Background = Column(String, unique=True, index=True)
+    Company = Column(String, unique=True, index=True)
+    ListActor = Column(String, unique=True, index=True)
+    year = Column(String, unique=True, index=True)
     comments = relationship("Comments", back_populates="movie")
     actor = relationship("MoviesActor",
                          back_populates="movie")
@@ -47,6 +52,7 @@ class User(Base):
     Email = Column(String)
     Hashed_password = Column(String)
     Role = Column(String)
+    avatar = Column(String)
     comments = relationship("Comments", back_populates="user")
     chat = relationship("Chat", back_populates="user")
 
