@@ -27,11 +27,11 @@ class Movie(MovieBase):
 class UserBase(BaseModel):
     Email: str
     Full_Name: str
+    avatar:  Optional[str] = None
 
 
 class User (UserBase):
     id: int
-    pass
 
     class Config:
         orm_mode = True
@@ -110,8 +110,8 @@ class UserCreate(BaseModel):
         return v
 
 
-class UserUpdate(UserBase):
-    Hashed_password: str
+class UserUpdate(BaseModel):
+    avatar:  Optional[str] = None
 
 
 class CommentIn(CommentsBase):
@@ -120,3 +120,9 @@ class CommentIn(CommentsBase):
 
 class ChatIn(ChatBase):
     pass
+
+
+class UserSchema(User):
+
+    class Config:
+        orm_mode = True

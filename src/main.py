@@ -5,10 +5,10 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from src import crud
 from src.database import SessionLocal, engine
-from src.schemas import Comments, Chat, UserCreate, CommentIn
+from src.schemas import Comments, Chat, UserCreate, CommentIn, UserSchema, UserUpdate
 from fastapi.security import OAuth2PasswordBearer
 from src import schemas
-from src.model import Login, Token
+from src.model import Login, Token, User
 from src.core.security import create_access_token, verify_password
 from src.db import get_db
 from src.core.security import get_current_user
@@ -114,3 +114,8 @@ async def create_comment(*, c: CommentIn, movieId: int, db: Session = Depends(ge
 @app.post("/chat/", response_model=Chat)
 async def create_message(*, c: ChatIn, db: SessionLocal = Depends(get_db), current_user: schemas.User = Depends(get_current_user)) -> Any:
     return crud.create_message(db=db, user_id=current_user.id, c=c)
+
+
+@app.put("/update/user", response_model=schemas.User)
+async def update_image(*, c: UserUpdate, db: SessionLocal = Depends(get_db), current_user: schemas.User = Depends(get_current_user)) -> Any:
+    return crud.update_image(db, current_user, c)

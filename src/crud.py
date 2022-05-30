@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from src import model
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
-from src.schemas import User, UserCreate, CommentIn
+from src.schemas import User, UserCreate, CommentIn, UserUpdate
 from src.core.security import hash_password
 from src.core.security import JWTBearer, decode_access_token
 from src.core.config import ALGORITHM, SECRET_KEY
@@ -87,6 +87,14 @@ def create_message(db: Session, user_id, c: ChatIn) -> Chat:
     db.commit()
     db.refresh(chat)
     return chat
+
+
+def update_image(db: Session, user: User, userUpdate: UserUpdate) -> User:
+    user.avatar = userUpdate.avatar
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
 
 
 def decode_access_token(db: Session, token: str):
