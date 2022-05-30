@@ -94,10 +94,9 @@ async def login(login: Login, db: SessionLocal = Depends(get_db)):
     )
 
 
-@app.get("/users/me")
-async def read_items(token: str, db: SessionLocal = Depends(get_db)):
-    userme = crud.decode_access_token(db, token)
-    return userme
+@app.get("/users/me", response_model=schemas.User)
+async def read_items(user: User = Depends(get_current_user)):
+    return user
 
 
 @app.post("/user", response_model=schemas.User)

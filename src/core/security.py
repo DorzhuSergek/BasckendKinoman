@@ -63,7 +63,7 @@ async def get_current_user(
     email: str = payload.get("sub")
     if email is None:
         raise cred_exception
-    user = await crud.get_by_email(db, email=email)
+    user = await crud.get_by_email(db, email)
     if user is None:
         return cred_exception
     return user
