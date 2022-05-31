@@ -5,6 +5,8 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from src.database import Base
 from sqlalchemy.ext.associationproxy import association_proxy
+import sqlalchemy
+import datetime
 
 
 class Movie(Base):
@@ -41,6 +43,7 @@ class Chat(Base):
     __tablename__ = "Chat"
     id = Column(Integer, primary_key=True, index=True, unique=True)
     UserId = Column(Integer, ForeignKey("User.id"))
+    time = Column(sqlalchemy.DateTime, default=datetime.datetime.utcnow)
     Text = Column(String)
     user = relationship("User", back_populates="chat")
 

@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr, Field, validator, constr
 from passlib.context import CryptContext
 from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException, Query
+import datetime
 
 
 class MovieBase(BaseModel):
@@ -71,6 +72,7 @@ class Chat(ChatBase):
     id: int
     user: Optional[User]
     UserId: int
+    time: datetime.datetime
 
     class Config:
         orm_mode = True
