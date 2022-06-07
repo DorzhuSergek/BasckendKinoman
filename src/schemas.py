@@ -78,6 +78,24 @@ class Chat(ChatBase):
         orm_mode = True
 
 
+class UserCreate(BaseModel):
+    Full_Name: str
+    Email: EmailStr
+    password: constr(min_length=5)
+    password2: str
+
+    @validator("password2")
+    def password_mathc(cls, v, values, **kwargs):
+        if 'password' in values and v != values["password"]:
+            raise ValueError("passwords dont match")
+        return v
+
+
+class UserUpdate(BaseModel):
+    avatar:  Optional[str] = None
+
+
+
 class ActorBase(BaseModel):
     FullName: str
     profile: str
@@ -98,22 +116,6 @@ class MovieSchema(MovieBase):
 class ActorSchema(ActorBase):
     movie: List[MovieBase]
 
-
-class UserCreate(BaseModel):
-    Full_Name: str
-    Email: EmailStr
-    password: constr(min_length=5)
-    password2: str
-
-    @validator("password2")
-    def password_mathc(cls, v, values, **kwargs):
-        if 'password' in values and v != values["password"]:
-            raise ValueError("passwords dont match")
-        return v
-
-
-class UserUpdate(BaseModel):
-    avatar:  Optional[str] = None
 
 
 class CommentIn(CommentsBase):
