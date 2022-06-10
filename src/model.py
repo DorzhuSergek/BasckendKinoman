@@ -90,3 +90,12 @@ class Token(BaseModel):
 class Login(BaseModel):
     email: EmailStr
     password: str
+
+
+class News(Base):
+    __tablename__ = "News"
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    desc = Column(String)
+    data = Column(String)
+    image = Column(String)

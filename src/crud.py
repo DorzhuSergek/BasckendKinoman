@@ -120,3 +120,7 @@ class JWTBearer(HTTPBearer):
             return credentials.credentials
         else:
             raise exp
+
+
+def get_news(db: Session):
+    return db.query(model.News).all()

@@ -118,3 +118,9 @@ async def create_message(*, c: ChatIn, db: SessionLocal = Depends(get_db), curre
 @app.put("/update/user", response_model=schemas.User)
 async def update_image(*, c: UserUpdate, db: SessionLocal = Depends(get_db), current_user: schemas.User = Depends(get_current_user)) -> Any:
     return crud.update_image(db, current_user, c)
+
+
+@app.get("/news")
+async def get_news(db: Session = Depends(get_db)):
+    news = crud.get_news(db)
+    return news

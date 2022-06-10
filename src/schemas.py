@@ -95,7 +95,6 @@ class UserUpdate(BaseModel):
     avatar:  Optional[str] = None
 
 
-
 class ActorBase(BaseModel):
     FullName: str
     profile: str
@@ -117,7 +116,6 @@ class ActorSchema(ActorBase):
     movie: List[MovieBase]
 
 
-
 class CommentIn(CommentsBase):
     pass
 
@@ -127,6 +125,20 @@ class ChatIn(ChatBase):
 
 
 class UserSchema(User):
+
+    class Config:
+        orm_mode = True
+
+
+class NewsBase (BaseModel):
+    title: str
+    desc: str
+    data: str
+    image: str
+
+
+class News(NewsBase):
+    id: int
 
     class Config:
         orm_mode = True
