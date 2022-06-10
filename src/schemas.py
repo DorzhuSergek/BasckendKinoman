@@ -135,6 +135,7 @@ class NewsBase (BaseModel):
     desc: str
     data: str
     image: str
+    imageDetail: str
 
 
 class News(NewsBase):

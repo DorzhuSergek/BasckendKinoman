@@ -99,3 +99,4 @@ class News(Base):
     desc = Column(String)
     data = Column(String)
     image = Column(String)
+    imageDetail = Column(String)
